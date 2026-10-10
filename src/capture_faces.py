@@ -8,7 +8,7 @@ if not os.path.exists(dataset_path):
 
 # Initialize webcam
 cap = cv2.VideoCapture(0)
-face_detector = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+face_detector = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 
 user_id = input("Enter User ID or Name: ")
 count = 0
