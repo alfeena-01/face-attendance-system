@@ -33,5 +33,9 @@ recognizer = cv2.face.LBPHFaceRecognizer_create()
 recognizer.train(faces, labels)
 recognizer.save(model_path)
 
+# Save the label map
+with open("models/labels.pkl", "wb") as f:
+    pickle.dump(label_map, f)
+
 print("✅ Model trained and saved!")
 print("Label map:", label_map)
