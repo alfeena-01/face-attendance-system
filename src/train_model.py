@@ -1,6 +1,7 @@
 import cv2
 import os
 import numpy as np
+import pickle
 
 dataset_path = "data"
 model_path = "models/face_model.yml"
