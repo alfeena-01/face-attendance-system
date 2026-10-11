@@ -2,13 +2,22 @@ import cv2
 import pandas as pd
 import datetime
 import os
+import pickle
 
 model_path = "models/face_model.yml"
+labels_path = "models/labels.pkl"
 attendance_file = "attendance/attendance.csv"
 
 # Load recognizer
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 recognizer.read(model_path)
+
+# Load label map
+with open(labels_path, "rb") as f:
+    label_map = pickle.load(f)
+
+# Reverse the dictionary (ID → Name)
+id_to_name = {v: k for k, v in label_map.items()}
 
 # Haar cascade for face detection
 face_detector = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
@@ -33,13 +42,7 @@ while True:
     for (x, y, w, h) in faces:
         id_, conf = recognizer.predict(gray[y:y+h, x:x+w])
         if conf < 70:  # confidence threshold
-            # Map ID back to name
-            name = None
-            for k, v in recognizer.getLabelsByString("").items():
-                if v == id_:
-                    name = k
-            if name is None:
-                name = f"User_{id_}"
+            name = id_to_name.get(id_, f"User_{id_}")
 
             cv2.putText(frame, name, (x, y-10),
                         cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2)
